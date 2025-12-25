@@ -282,7 +282,7 @@ include 'partials/dashboard/header.php';
     <div class="col-sm-6 col-xl-3">
       <div class="card overflow-hidden rounded-2">
         <div class="position-relative">
-          <a href="javascript:void(0)"><img src="src/images/products/s4.jpg" class="card-img-top rounded-0" alt="..."></a>
+          <a href="javascript:void(0)"><img src="<?php echo BASE_URL; ?>src/images/products/s4.jpg" class="card-img-top rounded-0" alt="..."></a>
           <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>
         </div>
         <div class="card-body pt-3 p-4">
@@ -303,7 +303,7 @@ include 'partials/dashboard/header.php';
     <div class="col-sm-6 col-xl-3">
       <div class="card overflow-hidden rounded-2">
         <div class="position-relative">
-          <a href="javascript:void(0)"><img src="src/images/products/s5.jpg" class="card-img-top rounded-0" alt="..."></a>
+          <a href="javascript:void(0)"><img src="<?php echo BASE_URL; ?>src/images/products/s5.jpg" class="card-img-top rounded-0" alt="..."></a>
           <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>
         </div>
         <div class="card-body pt-3 p-4">
@@ -324,7 +324,7 @@ include 'partials/dashboard/header.php';
     <div class="col-sm-6 col-xl-3">
       <div class="card overflow-hidden rounded-2">
         <div class="position-relative">
-          <a href="javascript:void(0)"><img src="src/images/products/s7.jpg" class="card-img-top rounded-0" alt="..."></a>
+          <a href="javascript:void(0)"><img src="<?php echo BASE_URL; ?>src/images/products/s7.jpg" class="card-img-top rounded-0" alt="..."></a>
           <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>
         </div>
         <div class="card-body pt-3 p-4">
@@ -345,7 +345,7 @@ include 'partials/dashboard/header.php';
     <div class="col-sm-6 col-xl-3">
       <div class="card overflow-hidden rounded-2">
         <div class="position-relative">
-          <a href="javascript:void(0)"><img src="src/images/products/s11.jpg" class="card-img-top rounded-0" alt="..."></a>
+          <a href="javascript:void(0)"><img src="<?php echo BASE_URL; ?>src/images/products/s11.jpg" class="card-img-top rounded-0" alt="..."></a>
           <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>
         </div>
         <div class="card-body pt-3 p-4">

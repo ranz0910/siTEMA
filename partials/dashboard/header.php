@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SITEMA</title>
-  <link rel="shortcut icon" type="image/png" href="src/images/logos/favicon.png" />
-  <link rel="stylesheet" href="src/css/styles.min.css" />
+  <link rel="shortcut icon" type="image/png" href="<?php echo BASE_URL; ?>src/images/logos/favicon.png" />
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>src/css/styles.min.css" />
 </head>
 
 <body>
@@ -35,7 +35,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <img src="src/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                  <img src="<?php echo BASE_URL; ?>src/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
