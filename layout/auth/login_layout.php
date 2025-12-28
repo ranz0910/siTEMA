@@ -1,4 +1,5 @@
-<?php include '../../init.php'; ?><?php include '../../service/guest.php'; ?>
+<?php include '../../init.php'; ?>
+<?php include '../../service/guest.php'; ?>
 
 <!doctype html>
 <html lang="en">
@@ -49,3 +50,7 @@
 </body>
 
 </html>
+
+  <?php 
+  include 'partials/dashboard/footer.php';
+  ?>

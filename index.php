@@ -1,14 +1,36 @@
 <?php
-include 'init.php';
-include 'service/auth.php';
+  include 'init.php';
+  include 'service/auth.php';
 ?>
 
 <?php
-include 'partials/dashboard/header.php';
+  include 'partials/dashboard/header.php';
 ?>
 
 <div class="container-fluid">
-  <!--  Row 1 -->
+     <?php 
+        $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
+    
+        switch ($page) {
+          case 'table_perusahaan':
+            include 'layout/auth/table_perusahaan.php';
+            break;
+
+          case 'form_tambah_perusahaan':
+            include 'layout/form_tambah_perusahaan.php'; 
+            break;
+            
+          case 'table_jurusan':
+            include 'layout/auth/table_jurusan.php';
+            break;
+
+          case 'form_tambah_jurusan':
+            include 'layout/form_tambah_jurusan.php'; 
+            break;
+
+          case 'dashboard':
+          default:
+     ?>
   <div class="row">
     <div class="col-lg-8 d-flex align-items-strech">
       <div class="card w-100">
@@ -30,6 +52,7 @@ include 'partials/dashboard/header.php';
         </div>
       </div>
     </div>
+
     <div class="col-lg-4">
       <div class="row">
         <div class="col-lg-12">
@@ -100,6 +123,7 @@ include 'partials/dashboard/header.php';
         </div>
       </div>
     </div>
+
   </div>
   <div class="row">
     <div class="col-lg-4 d-flex align-items-stretch">
@@ -278,6 +302,7 @@ include 'partials/dashboard/header.php';
       </div>
     </div>
   </div>
+
   <div class="row">
     <div class="col-sm-6 col-xl-3">
       <div class="card overflow-hidden rounded-2">
@@ -363,8 +388,14 @@ include 'partials/dashboard/header.php';
         </div>
       </div>
     </div>
-  </div>
 
-  <?php 
+      <?php
+        break;
+        }
+      ?>
+  </div>
+</div>
+
+<?php 
   include 'partials/dashboard/footer.php';
-  ?>
+?>
