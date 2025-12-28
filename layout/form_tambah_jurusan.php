@@ -4,7 +4,7 @@
       <h5 class="card-title fw-semibold mb-4">Form Input Data Jurusan</h5>
       <div class="card">
         <div class="card-body">
-          <form action="index.php?page=table_jurusan" method="POST">
+            <form action="process/login/jurusan/TambahJurusan.php" method="POST">
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="namaJurusan" class="form-label">Nama Jurusan</label>
