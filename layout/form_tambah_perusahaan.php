@@ -4,7 +4,7 @@
       <h5 class="card-title fw-semibold mb-4">Form Input Data Perusahaan</h5>
       <div class="card">
         <div class="card-body">
-          <form action="index.php?page=table_perusahaan" method="POST">
+           <form action="process/perusahaan/TambahPerusahaan.php" method="POST">
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="namaPerusahaan" class="form-label">Nama Perusahaan</label>
