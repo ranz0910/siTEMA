@@ -36,28 +36,6 @@
         </div>
       </div>
 
-      <h5 class="card-title fw-semibold mb-4">Disabled forms</h5>
-      <div class="card mb-0">
-        <div class="card-body">
-          <form>
-            <fieldset disabled>
-              <legend>Disabled fieldset example</legend>
-              <div class="mb-3">
-                <label for="disabledTextInput" class="form-label">Disabled input</label>
-                <input type="text" id="disabledTextInput" class="form-control" placeholder="Disabled input">
-              </div>
-              <div class="mb-3">
-                <label for="disabledSelect" class="form-label">Disabled select menu</label>
-                <select id="disabledSelect" class="form-select">
-                  <option>Disabled select</option>
-                </select>
-              </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </fieldset>
-          </form>
-        </div>
-      </div>
-
     </div>
   </div>
 </div>

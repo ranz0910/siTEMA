@@ -28,6 +28,18 @@
             include 'layout/form_tambah_jurusan.php'; 
             break;
 
+          case 'table_mahasiswa':
+            include 'layout/auth/table_mahasiswa.php';
+            break;
+
+          case 'form_tambah_mahasiswa':
+            include 'layout/form_tambah_mahasiswa.php'; 
+            break;
+
+          case 'lowongan_magang': 
+            include 'layout/lowongan_magang.php';
+            break;
+
           case 'dashboard':
           default:
      ?>
