@@ -40,6 +40,14 @@
             include 'layout/lowongan_magang.php';
             break;
 
+          case 'data_prodi':
+              include 'layout/auth/data_prodi.php';
+              break;
+
+          case 'pengajuan_magang':
+              include 'layout/pengajuan_magang.php';
+              break;
+
           case 'dashboard':
           default:
      ?>
