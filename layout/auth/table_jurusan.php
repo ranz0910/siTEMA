@@ -1,18 +1,18 @@
-<<<<<<< HEAD
+
 
 <div class="col-lg-12 mt-4">
   <div class="card mb-3">
     <div class="card-body p-4">
-=======
+
 <div class="container-fluid">
   <div class="card">
     <div class="card-body">
->>>>>>> 211a0c4f792a0c973320d9cf0fe96b150e93800a
+
       <div class="d-flex mb-4 justify-content-between align-items-center">
         <h5 class="card-title fw-semibold mb-0">Data Jurusan</h5>
         <a href="index.php?page=form_tambah_jurusan" class="btn btn-primary">Tambah Data Jurusan</a>
       </div>
-<<<<<<< HEAD
+
     </div>
   </div>
 </div>
@@ -68,7 +68,7 @@
           </tbody>
           
         </table>
-=======
+
       <div class="card">
         <div class="card-body">
           <div class="table-responsive">
@@ -117,7 +117,7 @@
           </div>
 
         </div>
->>>>>>> 211a0c4f792a0c973320d9cf0fe96b150e93800a
+
       </div>
     </div>
 </div>
