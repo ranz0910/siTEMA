@@ -3,14 +3,14 @@ require '../../../service/connection.php';
 
 if (isset($_POST['submit_jurusan'])) {
     
-    // 2. Ambil data dari form
+    // Ambil data 
     $username     = $_POST['username'];
     $password     = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $email        = $_POST['email_jurusan']; 
     $nama_jurusan = $_POST['nama_jurusan'];
     $id_roles     = 2; 
 
-    // 3. Cek Duplikat
+    
     $cek_duplikat = "SELECT id FROM users WHERE username = '$username' OR email = '$email'";
     $hasil_cek = $connect->query($cek_duplikat);
 
@@ -22,7 +22,7 @@ if (isset($_POST['submit_jurusan'])) {
         exit;
     }
 
-    // 4. Simpan ke Tabel Users
+    // Simpan ke Tabel Users
     $sqlUser = "INSERT INTO users (id_roles, username, password, email) 
                 VALUES ('$id_roles', '$username', '$password', '$email')";
     
@@ -31,7 +31,7 @@ if (isset($_POST['submit_jurusan'])) {
     if ($queryUser) {
         $id_user_baru = $connect->insert_id;
 
-        // 5. Simpan ke Tabel Jurusan
+        // Simpan ke Tabel Jurusan
         $sqlJurusan = "INSERT INTO jurusan (id_user, nama_jurusan) 
                        VALUES ('$id_user_baru', '$nama_jurusan')";
         

@@ -36,7 +36,7 @@
               <input type="checkbox" class="form-check-input" id="confirmCheck" required>
               <label class="form-check-label" for="confirmCheck">Data yang saya masukkan sudah benar</label>
             </div>
-            <button type="submit" name="submit_jurusan" class="btn btn-primary">Simpan Data Jurusan</button>
+            <button type="submit" name="submit_mahasiswa" class="btn btn-primary">Simpan Data Mahasiswa</button>
           </form>
         </div>
       </div>
