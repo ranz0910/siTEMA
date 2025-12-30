@@ -40,8 +40,37 @@
                   <div class="message-body">
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3">Profile</p>
+                      <p class="mb-0 fs-3">My Account</p>
                     </a>
+
+                    <?php 
+                    // Ambil role dari session
+                    $role = isset($_SESSION['role']) ? $_SESSION['role'] : ''; 
+
+                    // Kondisi jika yang login adalah MAHASISWA
+                    if ($role == 'mahasiswa'): ?>
+                      <a href="?page=profile_mahasiswa" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-id fs-6"></i>
+                        <p class="mb-0 fs-3">Profile Mahasiswa</p>
+                      </a>
+
+                    <?php 
+                    // Kondisi jika yang login adalah PERUSAHAAN
+                    elseif ($role == 'perusahaan'): ?>
+                      <a href="?page=profile_perusahaan" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-building fs-6"></i>
+                        <p class="mb-0 fs-3">Profile Perusahaan</p>
+                      </a>
+
+                    <?php 
+                    // Kondisi jika yang login adalah JURUSAN atau UNIT KERJA
+                    elseif ($role == 'jurusan' || $role == 'unit_kerjasama'): ?>
+                      <a href="?page=profile_admin" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-user-check fs-6"></i>
+                        <p class="mb-0 fs-3">Profile Admin</p>
+                      </a>
+                    <?php endif; ?>
+
                     <a href="<?php echo BASE_URL; ?>process/login/ProsesLogout.php" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
