@@ -49,6 +49,8 @@
             <span class="hide-menu">Mahasiswa</span>
           </a>
         </li>
+      </ul>
+
       
       
     </nav>
