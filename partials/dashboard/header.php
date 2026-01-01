@@ -44,30 +44,26 @@
                     </a>
 
                     <?php 
-                    // Ambil role dari session
+                    // Pastikan variabel $role sudah didefinisikan (sama seperti di sidebar)
                     $role = isset($_SESSION['role']) ? $_SESSION['role'] : ''; 
 
-                    // Kondisi jika yang login adalah MAHASISWA
+                    // Tampilkan menu berdasarkan role
                     if ($role == 'mahasiswa'): ?>
                       <a href="?page=profile_mahasiswa" class="d-flex align-items-center gap-2 dropdown-item">
-                        <i class="ti ti-id fs-6"></i>
+                        <i class="ti ti-id-badge fs-6"></i>
                         <p class="mb-0 fs-3">Profile Mahasiswa</p>
                       </a>
 
-                    <?php 
-                    // Kondisi jika yang login adalah PERUSAHAAN
-                    elseif ($role == 'perusahaan'): ?>
+                    <?php elseif ($role == 'perusahaan'): ?>
                       <a href="?page=profile_perusahaan" class="d-flex align-items-center gap-2 dropdown-item">
                         <i class="ti ti-building fs-6"></i>
                         <p class="mb-0 fs-3">Profile Perusahaan</p>
                       </a>
 
-                    <?php 
-                    // Kondisi jika yang login adalah JURUSAN atau UNIT KERJA
-                    elseif ($role == 'jurusan' || $role == 'unit_kerjasama'): ?>
-                      <a href="?page=profile_admin" class="d-flex align-items-center gap-2 dropdown-item">
-                        <i class="ti ti-user-check fs-6"></i>
-                        <p class="mb-0 fs-3">Profile Admin</p>
+                    <?php elseif ($role == 'jurusan'): ?>
+                      <a href="?page=profile_jurusan" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-school fs-6"></i>
+                        <p class="mb-0 fs-3">Profile Jurusan</p>
                       </a>
                     <?php endif; ?>
 
