@@ -13,6 +13,7 @@
                 <thead class="text-dark fs-4">
                   <tr>
                     <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Nama Jurusan</h6></th>
+                    <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Ketua Jurusan</h6></th>
                     <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Email Jurusan</h6></th>
                     <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Username</h6></th>
                     <th class="border-bottom-0"><h6 class="fw-semibold mb-0">Password</h6></th>
@@ -25,6 +26,7 @@
                       <h6 class="fw-semibold mb-1">Teknik Informatika</h6>
                       <span class="fw-normal">Fakultas Teknik</span>
                     </td>
+                    <td class="border-bottom-0"><p class="mb-0 fw-normal">Mawar</p></td>
                     <td class="border-bottom-0"><p class="mb-0 fw-normal">it@kampus.id</p></td>
                     <td class="border-bottom-0"><p class="mb-0 fw-normal">admin_it</p></td>
                     <td class="border-bottom-0"><p class="mb-0 fw-normal">********</p></td>
@@ -37,6 +39,7 @@
                       <h6 class="fw-semibold mb-1">Teknik Mesin</h6>
                       <span class="fw-normal">Fakultas Teknik</span>
                     </td>
+                    <td class="border-bottom-0"><p class="mb-0 fw-normal">Nadin</p></td>
                     <td class="border-bottom-0"><p class="mb-0 fw-normal">mesin@kampus.id</p></td>
                     <td class="border-bottom-0"><p class="mb-0 fw-normal">admin_mesin</p></td>
                     <td class="border-bottom-0"><p class="mb-0 fw-normal">********</p></td>
@@ -49,6 +52,7 @@
                       <h6 class="fw-semibold mb-1">Teknik Listrik</h6>
                       <span class="fw-normal">Fakultas Teknik</span>
                     </td>
+                    <td class="border-bottom-0"><p class="mb-0 fw-normal">Budi</p></td>
                     <td class="border-bottom-0"><p class="mb-0 fw-normal">listrik@kampus.id</p></td>
                     <td class="border-bottom-0"><p class="mb-0 fw-normal">admin_listrik</p></td>
                     <td class="border-bottom-0"><p class="mb-0 fw-normal">********</p></td>

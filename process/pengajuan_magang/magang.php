@@ -3,10 +3,9 @@ require '../../service/connection.php';
 
 if (isset($_POST['submit_pengajuan'])) {
 
-    // Ambil id_user dari session (jika login, default 0)
-    $id_user = $_SESSION['id_user'] ?? 0;
+    // Karena tidak login, id_user = 0
+    $id_user = 0;
 
-    // Ambil data dari form
     $nik             = $_POST['nik'];
     $nama_mahasiswa  = $_POST['nama'];
     $tempat_lahir    = $_POST['tempat_lahir'];
@@ -19,43 +18,46 @@ if (isset($_POST['submit_pengajuan'])) {
 
     $status = 'Pending';
 
-    // Cek duplikat pengajuan untuk user yang sama dan status Pending
-    $cek_duplikat = "
+    // Cek duplikat berdasarkan NIK + perusahaan
+    $cek_duplikat = $connect->prepare("
         SELECT id FROM pengajuan_magang
-        WHERE id_user = '$id_user'
-          AND id_perusahaan = '$id_perusahaan'
-          AND status = 'Pending'
-    ";
-    $hasil_cek = $connect->query($cek_duplikat);
+        WHERE nik = ? AND id_perusahaan = ? AND status = 'Pending'
+    ");
+    $cek_duplikat->bind_param("si", $nik, $id_perusahaan);
+    $cek_duplikat->execute();
+    $hasil_cek = $cek_duplikat->get_result();
 
     if ($hasil_cek->num_rows > 0) {
         echo "<script>
-                alert('Anda sudah memiliki pengajuan magang yang masih Pending.');
+                alert('Anda sudah memiliki pengajuan Pending untuk perusahaan ini.');
                 window.history.back();
               </script>";
         exit;
     }
 
-    // Insert ke tabel pengajuan_magang
-    $sqlPengajuan = "
+    // Insert data
+    $stmt = $connect->prepare("
         INSERT INTO pengajuan_magang
         (id_user, nik, nama_mahasiswa, tempat_lahir, tanggal_lahir,
          jekel, agama, alamat, id_perusahaan, keterangan, status)
-        VALUES
-        ('$id_user', '$nik', '$nama_mahasiswa', '$tempat_lahir', '$tanggal_lahir',
-         '$jekel', '$agama', '$alamat', '$id_perusahaan', '$keterangan', '$status')
-    ";
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param("isssssssiss",
+        $id_user, $nik, $nama_mahasiswa, $tempat_lahir, $tanggal_lahir,
+        $jekel, $agama, $alamat, $id_perusahaan, $keterangan, $status
+    );
 
-    $queryPengajuan = $connect->query($sqlPengajuan);
-
-    if ($queryPengajuan) {
+    if ($stmt->execute()) {
         echo "<script>
                 alert('Pengajuan magang berhasil dikirim.');
                 window.location.href='../../index.php?page=pengajuan_saya';
               </script>";
     } else {
-        echo 'Gagal menyimpan pengajuan: ' . $connect->error;
+        echo "Gagal menyimpan pengajuan: " . $stmt->error;
     }
 
+    $stmt->close();
+    $cek_duplikat->close();
+    $connect->close();
 }
 ?>

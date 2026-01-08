@@ -1,6 +1,8 @@
 <?php
 require '../../../service/connection.php';
 
+
+
 if (isset($_POST['submit_jurusan'])) {
     
     // Ambil data 
@@ -8,6 +10,7 @@ if (isset($_POST['submit_jurusan'])) {
     $password     = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $email        = $_POST['email_jurusan']; 
     $nama_jurusan = $_POST['nama_jurusan'];
+    $ketua_jurusan = $_POST['ketua_jurusan'];
     $id_roles     = 2; 
 
     
@@ -32,8 +35,9 @@ if (isset($_POST['submit_jurusan'])) {
         $id_user_baru = $connect->insert_id;
 
         // Simpan ke Tabel Jurusan
-        $sqlJurusan = "INSERT INTO jurusan (id_user, nama_jurusan) 
-                       VALUES ('$id_user_baru', '$nama_jurusan')";
+        $sqlJurusan = "INSERT INTO jurusan (id_user, ketua_jurusan, nama_jurusan) 
+                       VALUES ('$id_user_baru', '$ketua_jurusan', '$nama_jurusan')";
+
         
         $queryJurusan = $connect->query($sqlJurusan);
 
