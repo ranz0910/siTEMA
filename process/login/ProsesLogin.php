@@ -1,6 +1,7 @@
 <?php
 include '../../init.php';
 
+
 require '../../service/connection.php';
 session_start();
 
