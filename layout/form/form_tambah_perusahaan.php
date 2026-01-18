@@ -5,6 +5,17 @@
       <div class="card">
         <div class="card-body">
           <form action="process/perusahaan/TambahPerusahaan.php" method="POST">
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" id="username" placeholder="Masukkan username" required>
+              </div>
+              <div class="col-md-6">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="********" required>
+              </div>
+            </div>
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="namaPerusahaan" class="form-label">Nama Perusahaan</label>
@@ -31,11 +42,13 @@
               <input type="checkbox" class="form-check-input" id="confirmCheck" required>
               <label class="form-check-label" for="confirmCheck">Data yang saya masukkan sudah benar</label>
             </div>
-            <button type="submit" name="submit_perusahaan" class="btn btn-primary">Simpan Data Perusahaan</button>
+            <div class="mt-3">
+             <button type="submit" name="submit_perusahaan" class="btn btn-primary">Simpan Data & Akun</button>
+              <a href="index.php?page=data_perusahaan" class="btn btn-outline-danger ms-2">Batal</a>
+            </div>
           </form>
         </div>
       </div>
-
     </div>
   </div>
 </div>

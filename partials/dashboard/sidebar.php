@@ -55,12 +55,12 @@
 
           <?php if ($role === 'unit_kerjasama') : ?>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="index.php?page=table_perusahaan">
+              <a class="sidebar-link" href="index.php?page=data_perusahaan">
                 <span><i class="ti ti-building-community"></i></span><span class="hide-menu">Perusahaan</span>
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="index.php?page=table_jurusan">
+              <a class="sidebar-link" href="index.php?page=data_jurusan">
                 <span><i class="ti ti-building-skyscraper"></i></span><span class="hide-menu">Jurusan</span>
               </a>
             </li>
@@ -73,7 +73,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="index.php?page=table_mahasiswa">
+              <a class="sidebar-link" href="index.php?page=data_mahasiswa">
                 <span><i class="ti ti-school"></i></span><span class="hide-menu">Mahasiswa</span>
               </a>
             </li>

@@ -1,5 +1,5 @@
 <?php
-require '../../../service/connection.php';
+require '../../service/connection.php';
 
 if (isset($_POST['submit_jurusan'])) {
     
@@ -40,8 +40,7 @@ if (isset($_POST['submit_jurusan'])) {
         if ($queryJurusan) {
             echo "<script>
                     alert('Berhasil menyimpan data jurusan.');
-                    // PERBAIKAN DI SINI: Tambahkan ../../../ agar kembali ke folder utama
-                    window.location.href = '../../../index.php?page=table_jurusan';
+                    window.location.href = '../../../index.php?page=data_jurusan';
                   </script>";
         } else {
             echo "Gagal menyimpan ke tabel jurusan: " . $connect->error;

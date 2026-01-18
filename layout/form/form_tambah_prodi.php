@@ -2,16 +2,19 @@
 // Cek apakah ada parameter ID untuk mode EDIT
 $is_edit = isset($_GET['id']);
 $id_prodi = "";
+$kode_prodi = ""; // Tambahkan variabel untuk kode prodi
 $nama_prodi = "";
 
 if ($is_edit) {
-    $id_prodi = $_GET['id'];
-    // Ambil data lama dari database
-    $query = mysqli_query($koneksi, "SELECT * FROM jurusan WHERE id = '$id_prodi'");
+    $id_prodi = mysqli_real_escape_string($connect, $_GET['id']);
+    
+    // PERBAIKAN: Ambil data dari tabel PRODI, bukan JURUSAN
+    $query = mysqli_query($connect, "SELECT * FROM prodi WHERE id = '$id_prodi'");
     $data = mysqli_fetch_assoc($query);
     
     if ($data) {
-        $nama_prodi = $data['nama_jurusan'];
+        $kode_prodi = $data['kode_prodi']; // Ambil kode asli dari DB
+        $nama_prodi = $data['nama_prodi'];
     }
 }
 ?>
@@ -22,7 +25,7 @@ if ($is_edit) {
             <h5 class="card-title fw-semibold mb-4"><?= $is_edit ? 'Form Edit Data Prodi' : 'Form Input Data Prodi' ?></h5>
             <div class="card">
                 <div class="card-body">
-                    <form action="<?= $is_edit ? 'process/prodi/EditProdi.php' : 'process/prodi/TambahProdi.php' ?>" method="POST">
+                    <form action="<?= $is_edit ? 'process/prodi/edit_prodi.php' : 'process/prodi/TambahProdi.php' ?>" method="POST">
                         
                         <?php if ($is_edit): ?>
                             <input type="hidden" name="id_prodi" value="<?= $id_prodi ?>">
@@ -33,9 +36,7 @@ if ($is_edit) {
                                 <label for="kodeProdi" class="form-label">Kode Prodi</label>
                                 <input type="text" name="kode_prodi" class="form-control" id="kodeProdi" 
                                        placeholder="ex: PRODI-001" 
-                                       value="<?= $is_edit ? 'PRODI-'.$id_prodi : '' ?>" 
-                                       <?= $is_edit ? 'readonly' : '' ?> required>
-                                <small class="text-muted">Kode prodi biasanya otomatis atau tetap saat edit.</small>
+                                       value="<?= $kode_prodi ?>" required>
                             </div>
                             
                             <div class="col-md-6 mb-3">
@@ -55,7 +56,7 @@ if ($is_edit) {
                             <button type="submit" name="submit_prodi" class="btn btn-primary">
                                 <?= $is_edit ? 'Perbarui Data Prodi' : 'Simpan Data Prodi' ?>
                             </button>
-                            <a href="index.php?page=data_prodi" class="btn btn-light">Batal</a>
+                            <a href="index.php?page=data_program" class="btn btn-outline-danger ms-2">Batal</a>
                         </div>
                     </form>
                 </div>

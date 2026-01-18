@@ -1,3 +1,3 @@
 <?php
-define('BASE_URL', 'http://localhost/siTEMA/');
+define('BASE_URL', 'http://localhost/siTEMA_old/');
 ?>
