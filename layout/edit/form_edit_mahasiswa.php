@@ -111,11 +111,16 @@ if (!$data) {
                     </div>
                 </div>
 
+                <div class="mb-4 mt-2 form-check">
+                    <input type="checkbox" class="form-check-input" id="confirmCheck" required>
+                    <label class="form-check-label" for="confirmCheck">Saya yakin ingin mengubah data ini</label>
+                </div>
+
                 <div class="d-flex justify-content gap-2 border-top pt-4">
-                    <a href="<?= BASE_URL ?>layout/read/data_mahasiswa.php" class="btn btn-outline-danger px-4">Batal</a>
                     <button type="submit" name="submit_edit" class="btn btn-primary px-4 shadow-sm">
                         <i class="ti ti-device-floppy me-1"></i> Simpan Perubahan
                     </button>
+                    <a href="<?= BASE_URL ?>layout/read/data_mahasiswa.php" class="btn btn-outline-danger px-4">Batal</a>                    
                 </div>
 
             </form>

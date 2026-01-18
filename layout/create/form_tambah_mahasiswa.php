@@ -102,6 +102,11 @@ include '../../service/auth.php';
           </div>
         </div>
 
+        <div class="mb-4 mt-2 form-check">
+          <input type="checkbox" class="form-check-input" id="confirmCheck" required>
+          <label class="form-check-label" for="confirmCheck">Saya yakin ingin mengubah data ini</label>
+        </div>
+
         <!-- ACTION -->
         <div class="px-3">
           <div class="mt-4">
