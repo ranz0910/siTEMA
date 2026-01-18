@@ -1,17 +1,16 @@
 <?php
+require_once __DIR__ . '/../config/DatabaseConfig.php';
+global $connect;
 
-$host = "localhost";
-$username = "root";
+$host     = "localhost";
+$user     = "root";
 $password = "";
-$db_name = "sistemmagangdb";
+$db       = "sistemmagangdb";
 
-// Menghubungkan php dengan database
+$connect = mysqli_connect($host, $user, $password, $db);
 
-$connect = new mysqli($host,$username,$password,$db_name);
-
-if ($connect->connect_error) {
-  die("Koneksi gagal!");
+if (!$connect) {
+    die("Koneksi gagal: " . mysqli_connect_error());
 }
-
 
 ?>

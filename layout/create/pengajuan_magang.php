@@ -3,7 +3,7 @@
     <div class="card-body">
       <h5 class="card-title fw-semibold mb-4">Form Pengajuan Magang</h5>
 
-      <form action="process/pengajuan_magang/magang.php" method="POST">
+      <form action="process/magang/update.php" method="POST">
 
         <div class="row mb-3">
           <div class="col-md-6">

@@ -1,65 +1,61 @@
-<?php
-include '../../init.php';
-include '../../service/auth.php';
-?>
-
-<?php include '../../partials/dashboard/header.php'; ?>
-
 <div class="container-fluid">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title fw-semibold mb-4">Form Tambah Jurusan</h5>
+      
+      <div class="card shadow-none border">
+        <div class="card-body">
+          <form action="<?= BASE_URL ?>process/jurusan/save.php" method="POST">
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" id="username" placeholder="Username" required>
+              </div>
 
-    <h3>Form Tambah Jurusan</h3>
-    <br>
+              <div class="col-md-6 mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="********" required>
+              </div>
 
-    <form action="<?= BASE_URL ?>process/jurusan/save.php" method="POST">
+              <div class="col-md-6 mb-3">
+                <label for="namaJurusan" class="form-label">Nama Jurusan</label>
+                <input type="text" name="nama_jurusan" class="form-control" id="namaJurusan" placeholder="Contoh: Teknik Informatika" required>
+              </div>
 
-        <!-- ACCOUNT FORM -->
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title mb-4">Account Form</h5>
+              <div class="col-md-6 mb-3">
+                <label for="kodeJurusan" class="form-label">Kode Jurusan</label>
+                <input type="text" name="kode_jurusan" class="form-control" id="kodeJurusan" placeholder="JRS-XXX" required>
+              </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input type="text" class="form-control" name="username" placeholder="Username" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" class="form-control" name="password" placeholder="******" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" placeholder="email@jurusan.ac.id" required>
-                </div>
+              <div class="col-md-6 mb-3">
+                <label for="ketuaJurusan" class="form-label">Ketua Jurusan</label>
+                <input type="text" name="ketua_jurusan" class="form-control" id="ketuaJurusan" placeholder="Nama Lengkap & Gelar" required>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="emailJurusan" class="form-label">Email Jurusan</label>
+                <input type="email" name="email_jurusan" class="form-control" id="emailJurusan" placeholder="it@kampus.id" required>
+              </div>
             </div>
-        </div>
 
-        <!-- ACCOUNT DETAIL -->
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title mb-4">Account Detail</h5>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Nama Jurusan</label>
-                        <input type="text" class="form-control" name="nama_jurusan" placeholder="Nama Jurusan" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Kode Jurusan</label>
-                        <input type="text" class="form-control" name="kode_jurusan" placeholder="Kode Jurusan" required>
-                    </div>
-                </div>
-
-                <div class="text-end">
-                    <button type="submit" class="btn btn-primary mt-2">
-                        Simpan Data Jurusan
-                    </button>
-                </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="confirmCheck" required>
+              <label class="form-check-label" for="confirmCheck">Data yang saya masukkan sudah benar</label>
             </div>
-        </div>
 
-    </form>
+            <div class="mt-4">
+              <button type="submit" name="submit_jurusan" class="btn btn-primary">
+                Simpan Data & Akun
+              </button>
+              <a href="<?= BASE_URL ?>index.php?page=data_jurusan" class="btn btn-outline-danger ms-2">
+                Batal
+              </a>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<?php include '../../partials/dashboard/footer.php'; ?>
