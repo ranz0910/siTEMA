@@ -7,7 +7,7 @@ $totalMitra   = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total
 $totalPending = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM pengajuan_magang WHERE status='Pending'"))['total'];
 $totalSuccess = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM pengajuan_magang WHERE status='Diterima'"))['total'];
 
-$queryTabel = mysqli_query($conn, "SELECT pengajuan_magang.*, mahasiswa.nama_mahasiswa, mahasiswa.prodi 
+$queryTabel = mysqli_query($conn, "SELECT pengajuan_magang.*, mahasiswa.nama_mahasiswa, mahasiswa.id_prodi 
                                    FROM pengajuan_magang 
                                    JOIN mahasiswa ON pengajuan_magang.id = mahasiswa.id 
                                    ORDER BY pengajuan_magang.created_at DESC LIMIT 5");
@@ -23,7 +23,7 @@ $queryTabel = mysqli_query($conn, "SELECT
     p.nama_mahasiswa, 
     p.status, 
     p.created_at, 
-    m.prodi, 
+    m.id_prodi, 
     pr.nama_perusahaan
     FROM pengajuan_magang p
     LEFT JOIN mahasiswa m ON p.id_user = m.id_user 

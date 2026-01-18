@@ -77,7 +77,7 @@ include '../../partials/header.php';
                                            class="btn btn-outline-warning btn-sm" title="Edit">
                                             <i class="ti ti-edit fs-4"></i>
                                         </a>
-                                        <a href="<?= BASE_URL; ?>process/perusahaan/hapus_perusahaan.php?id=<?= $row['id']; ?>" 
+                                        <a href="<?= BASE_URL; ?>process/perusahaan/delete.php?id=<?= $row['id']; ?>" 
                                            class="btn btn-outline-danger btn-sm" 
                                            onclick="return confirm('Hapus data perusahaan ini?')" title="Hapus">
                                             <i class="ti ti-trash fs-4"></i>

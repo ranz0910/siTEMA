@@ -27,7 +27,7 @@ class Jurusan {
         $id_roles      = 2;
 
         // cek duplikat
-        $cek = $connect->query("
+        $cek = $koneksi->query("
         SELECT id FROM users 
         WHERE username='$username' OR email='$email'");
 
@@ -36,14 +36,14 @@ class Jurusan {
         }
 
         // insert users
-        $connect->query("
+        $koneksi->query("
         INSERT INTO users (id_roles, username, password, email)
         VALUES ('$id_roles', '$username', '$password', '$email')");
 
-        $id_user = $connect->insert_id;
+        $id_user = $koneksi->insert_id;
 
         // insert jurusan
-        $connect->query("
+        $koneksi->query("
         INSERT INTO jurusan (id_user, nama_jurusan, kode_jurusan)
         VALUES ('$id_user', '$nama_jurusan', '$kode_jurusan')");
 
@@ -52,28 +52,27 @@ class Jurusan {
 
     public static function update($data) {
         global $koneksi; // Pastikan ini sesuai dengan nama di DatabaseConfig.php
-        
-        $id_jurusan   = mysqli_real_escape_string($connect, $data['id_jurusan']);
-        $id_user      = mysqli_real_escape_string($connect, $data['id_user']);
-        $username     = mysqli_real_escape_string($connect, $data['username']);
-        $email        = mysqli_real_escape_string($connect, $data['email']);
-        $nama_jurusan = mysqli_real_escape_string($connect, $data['nama_jurusan']);
-        $kode_jurusan = mysqli_real_escape_string($connect, $data['kode_jurusan']);
 
-        mysqli_begin_transaction($connect);
+        $id_jurusan   = mysqli_real_escape_string($koneksi, $data['id_jurusan']);
+        $id_user      = mysqli_real_escape_string($koneksi, $data['id_user']);
+        $username     = mysqli_real_escape_string($koneksi, $data['username']);
+        $email        = mysqli_real_escape_string($koneksi, $data['email']);
+        $nama_jurusan = mysqli_real_escape_string($koneksi, $data['nama_jurusan']);
+        $kode_jurusan = mysqli_real_escape_string($koneksi, $data['kode_jurusan']);
+
+        mysqli_begin_transaction($koneksi);
         try {
             // 1. Update Tabel Users (Gunakan id_user)
             $queryUser = "UPDATE users SET username = '$username', email = '$email' WHERE id = '$id_user'";
-            mysqli_query($connect, $queryUser);
-
+            mysqli_query($koneksi, $queryUser);
             // 2. Update Tabel Jurusan (Gunakan id_jurusan)
             $queryJurusan = "UPDATE jurusan SET nama_jurusan = '$nama_jurusan', kode_jurusan = '$kode_jurusan' WHERE id = '$id_jurusan'";
-            mysqli_query($connect, $queryJurusan);
+            mysqli_query($koneksi, $queryJurusan);
 
-            mysqli_commit($connect);
+            mysqli_commit($koneksi);
             return true;
         } catch (Exception $e) {
-            mysqli_rollback($connect);
+            mysqli_rollback($koneksi);
             return false;
         }
     }
@@ -94,11 +93,11 @@ class Jurusan {
         $id_user = $row['id_user'];
 
         // Hapus jurusan
-        $connect->query("
+        $koneksi->query("
         DELETE FROM jurusan WHERE id = '$id_jurusan'");
 
         // Hapus user
-        $connect->query("
+        $koneksi->query("
         DELETE FROM users WHERE id = '$id_user'");
 
         return ['status' => true];

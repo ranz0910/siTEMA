@@ -50,12 +50,12 @@ $role_id = isset($_SESSION['id_roles']) ? $_SESSION['id_roles'] : 0;
 
         <?php if ($role_id == 2) : ?>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="<?php echo BASE_URL; ?>index.php?page=data_prodi">
+            <a class="sidebar-link" href="<?php echo BASE_URL; ?>/layout/read/data_prodi.php">
               <span><i class="ti ti-book"></i></span><span class="hide-menu">Data Prodi</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="<?php echo BASE_URL; ?>index.php?page=data_mahasiswa">
+            <a class="sidebar-link" href="<?php echo BASE_URL; ?>/layout/read/data_mahasiswa.php">
               <span><i class="ti ti-school"></i></span><span class="hide-menu">Data Mahasiswa</span>
             </a>
           </li>

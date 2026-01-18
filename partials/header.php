@@ -76,18 +76,6 @@
                     }
                     ?>
 
-                    <?php if ($role_id == 4): // Mahasiswa ?>
-                        <a href="index.php?page=profile_mahasiswa&id=<?= $user_id ?>" class="d-flex align-items-center gap-2 dropdown-item">
-                            <i class="ti ti-id-badge fs-6"></i>
-                            <p class="mb-0 fs-3">Profile Mahasiswa</p>
-                        </a>                    
-                    <?php elseif ($role_id == 2): // Jurusan ?>
-                        <a href="index.php?page=profile_jurusan&id=<?= $id_profil_jurusan ?>" class="d-flex align-items-center gap-2 dropdown-item">
-                            <i class="ti ti-school fs-6"></i>
-                            <p class="mb-0 fs-3">Profile Jurusan</p>
-                        </a>
-                    <?php endif; ?>
-
                     <a href="<?php echo BASE_URL; ?>process/login/ProsesLogout.php" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
