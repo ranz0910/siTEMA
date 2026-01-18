@@ -3,24 +3,53 @@ include '../../init.php';
 include '../../service/auth.php';
 require_once '../../repository/Perusahaan.php';
 
-// 1. Ambil ID dari URL
-if (!isset($_GET['id'])) {
-    header("Location: " . BASE_URL . "layout/read/data_perusahaan.php");
-    exit;
+$id = $_GET['id'] ?? '';
+
+try {
+    if (empty($id)) {
+        throw new Exception("ID tidak ditemukan.");
+    }
+
+    // Eksekusi hapus di repository
+    $result = Perusahaan::delete($id);
+
+    if (!$result['status']) {
+        throw new Exception($result['msg']);
+    }
+
+    // Notifikasi berhasil muncul SETELAH data terhapus
+    echo "
+    <html>
+    <head><script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script></head>
+    <body style='font-family: sans-serif;'>
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Terhapus!',
+                text: 'Data perusahaan telah berhasil dihapus.',
+                confirmButtonColor: '#5D87FF'
+            }).then(() => {
+                window.location.href = '" . BASE_URL . "/layout/read/data_perusahaan.php';
+            });
+        </script>
+    </body>
+    </html>";
+
+} catch (Exception $e) {
+    // Notifikasi jika gagal
+    echo "
+    <html>
+    <head><script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script></head>
+    <body>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: '" . addslashes($e->getMessage()) . "'
+            }).then(() => {
+                window.history.back();
+            });
+        </script>
+    </body>
+    </html>";
 }
-
-$id = $_GET['id'];
-
-// 2. Panggil fungsi delete di Repository
-// Pastikan di dalam Perusahaan::delete($id) juga menghapus id_user terkait jika perlu
-$result = Perusahaan::delete($id);
-
-// 3. Redirect kembali ke halaman data dengan parameter status
-if ($result['status']) {
-    // Berhasil hapus
-    header("Location: " . BASE_URL . "layout/read/data_perusahaan.php?success=delete");
-} else {
-    // Gagal hapus
-    header("Location: " . BASE_URL . "layout/read/data_perusahaan.php?error=" . urlencode($result['msg']));
-}
-exit;

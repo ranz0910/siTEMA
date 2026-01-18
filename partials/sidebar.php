@@ -42,7 +42,7 @@ $role_id = isset($_SESSION['id_roles']) ? $_SESSION['id_roles'] : 0;
             </a>
           </li>       
           <li class="sidebar-item">
-            <a class="sidebar-link" href="<?php echo BASE_URL; ?>index.php?page=data_perusahaan">
+            <a class="sidebar-link" href="<?php echo BASE_URL; ?>/layout/read/data_perusahaan.php">
               <span><i class="ti ti-building-community"></i></span><span class="hide-menu">Perusahaan</span>
             </a>
           </li>          
@@ -60,7 +60,7 @@ $role_id = isset($_SESSION['id_roles']) ? $_SESSION['id_roles'] : 0;
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="<?php echo BASE_URL; ?>index.php?page=pengajuan_magang">
+            <a class="sidebar-link" href="<?php echo BASE_URL; ?>/layout/create/pengajuan_magang.php">
               <span><i class="ti ti-file-description"></i></span><span class="hide-menu">Pengajuan Magang</span>
             </a>
           </li>
@@ -68,7 +68,7 @@ $role_id = isset($_SESSION['id_roles']) ? $_SESSION['id_roles'] : 0;
 
         <?php if ($role_id == 3) : ?>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="<?php echo BASE_URL; ?>index.php?page=lowongan_magang">
+            <a class="sidebar-link" href="<?php echo BASE_URL; ?>/layout/read/lowongan_magang.php">
               <span><i class="ti ti-briefcase"></i></span><span class="hide-menu">Lowongan Magang</span>
             </a>
           </li>
@@ -76,7 +76,7 @@ $role_id = isset($_SESSION['id_roles']) ? $_SESSION['id_roles'] : 0;
 
         <?php if ($role_id == 4) : ?>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="<?php echo BASE_URL; ?>index.php?page=pengajuan_magang">
+            <a class="sidebar-link" href="<?php echo BASE_URL; ?>/layout/create/pengajuan_magang.php">
               <span><i class="ti ti-file-description"></i></span><span class="hide-menu">Pengajuan Magang</span>
             </a>
           </li>

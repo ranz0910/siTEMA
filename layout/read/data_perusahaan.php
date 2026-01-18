@@ -1,5 +1,9 @@
 <?php
 
+include '../../init.php';
+include '../../service/auth.php';
+require_once '../../repository/Perusahaan.php';
+
 // Mengambil data menggunakan Repository sesuai gaya bahasa baru
 $dataPerusahaan = Perusahaan::getAll();
 
@@ -14,7 +18,7 @@ include '../../partials/header.php';
                     <h5 class="card-title fw-bold mb-1">Data Mitra Perusahaan</h5>
                     <p class="text-muted mb-0 small">Daftar perusahaan mitra yang tersedia untuk program magang.</p>
                 </div>
-                <a href="<?php echo BASE_URL; ?>layout/create/form_tambah_perusahaan.php" class="btn btn-primary d-flex align-items-center">
+                <a href="<?php echo BASE_URL; ?>/layout/create/form_tambah_perusahaan.php" class="btn btn-primary d-flex align-items-center">
                     <i class="ti ti-plus me-2 fs-4"></i> Tambah Data Perusahaan
                 </a>
             </div>
@@ -54,30 +58,27 @@ include '../../partials/header.php';
                                 <td>
                                     <p class="mb-0 small text-wrap" style="max-width: 250px;">
                                         <i class="ti ti-map-pin me-1 text-danger"></i>
-                                        <?= htmlspecialchars($row['alamat']); ?>
-                                    </p>
+                                        <?= htmlspecialchars($row['alamat_perusahaan']); ?> </p>
                                 </td>
 
                                 <td>
                                     <div class="d-flex flex-column gap-1">
                                         <div class="d-flex align-items-center">
                                             <i class="ti ti-phone me-2 text-success fs-3"></i>
-                                            <small class="text-dark"><?= htmlspecialchars($row['kontak']); ?></small>
-                                        </div>
+                                            <small class="text-dark"><?= htmlspecialchars($row['telp_perusahaan']); ?></small> </div>
                                         <div class="d-flex align-items-center">
                                             <i class="ti ti-mail me-2 text-primary fs-3"></i>
-                                            <small class="text-muted"><?= htmlspecialchars($row['email']); ?></small>
-                                        </div>
+                                            <small class="text-muted"><?= htmlspecialchars($row['email_perusahaan']); ?></small> </div>
                                     </div>
                                 </td>
 
                                 <td class="text-center">
                                     <div class="btn-group shadow-sm" role="group">
-                                        <a href="<?= BASE_URL; ?>layout/edit/form_edit_perusahaan.php?id=<?= $row['id']; ?>" 
+                                        <a href="<?= BASE_URL; ?>/layout/edit/form_edit_perusahaan.php?id=<?= $row['id']; ?>" 
                                            class="btn btn-outline-warning btn-sm" title="Edit">
                                             <i class="ti ti-edit fs-4"></i>
                                         </a>
-                                        <a href="<?= BASE_URL; ?>process/perusahaan/delete.php?id=<?= $row['id']; ?>" 
+                                        <a href="<?= BASE_URL; ?>/process/perusahaan/delete.php?id=<?= $row['id']; ?>" 
                                            class="btn btn-outline-danger btn-sm" 
                                            onclick="return confirm('Hapus data perusahaan ini?')" title="Hapus">
                                             <i class="ti ti-trash fs-4"></i>
@@ -101,6 +102,4 @@ include '../../partials/header.php';
     </div>
 </div>
 
-<?php
-include '../../partials/footer.php';
-?>
+<?php include '../../partials/footer.php';  ?>
