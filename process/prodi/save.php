@@ -1,76 +1,103 @@
 <?php
 include '../../init.php';
 include '../../service/auth.php';
+require_once '../../repository/Prodi.php';
 
-// Pastikan request datang dari POST
+// ================= PROTEKSI METHOD =================
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ' . BASE_URL . 'layout/read/data_prodi.php');
     exit;
 }
 
-// Cek apakah ini mode Update (ada id_prodi) atau mode Create
-// Kita gunakan id_prodi sebagai penanda karena di form edit Anda menggunakan name="id_prodi"
+// ================= CEK LOGIN =================
+if (!isset($_SESSION['user_id'])) {
+    header("Location: " . BASE_URL . "index.php");
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+
+// ================= AMBIL ID JURUSAN DARI USER =================
+$q = mysqli_query(
+    $koneksi,
+    "SELECT id FROM jurusan WHERE id_user = '$user_id'"
+);
+
+$dataJurusan = mysqli_fetch_assoc($q);
+
+if (!$dataJurusan) {
+    echo "Jurusan tidak ditemukan untuk user ini.";
+    exit;
+}
+
+$idJurusan = $dataJurusan['id'];
+
+// ================= SWEETALERT =================
+echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+<body style='font-family:sans-serif;'>";
+
+// ================= CEK MODE =================
 $isUpdate = isset($_POST['id_prodi']) && !empty($_POST['id_prodi']);
 
-// Ambil data nama_prodi (digunakan baik di Create maupun Update)
-$nama_prodi = mysqli_real_escape_string($connect, $_POST['nama_prodi']);
-
 if ($isUpdate) {
-    // ==========================================
-    // LOGIKA UPDATE (Data sudah ada)
-    // ==========================================
-    $id_prodi = mysqli_real_escape_string($connect, $_POST['id_prodi']); 
 
-    $query = "UPDATE prodi SET 
-                nama_prodi = '$nama_prodi' 
-              WHERE id = '$id_prodi'";
+    /* ================= UPDATE ================= */
+    $data = [
+        'id_prodi'   => $_POST['id_prodi'],
+        'id_jurusan' => $idJurusan, // 🔐 hasil query, bukan session
+        'kode_prodi' => $_POST['kode_prodi'],
+        'nama_prodi' => $_POST['nama_prodi'],
+        'jenjang'    => $_POST['jenjang'],
+    ];
 
-    if (mysqli_query($connect, $query)) {
-        echo "
-        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-        <body style='font-family: sans-serif;'>
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: 'Data program studi telah diperbarui.',
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(function() {
-                    window.location.href = '" . BASE_URL . "layout/read/data_prodi.php';
-                });
-            </script>
-        </body>";
+    $update = Prodi::update($data);
+
+    if ($update) {
+        echo "<script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Data program studi berhasil diperbarui.',
+                showConfirmButton: true
+            }).then(() => {
+                window.location.href = '" . BASE_URL . "layout/read/data_prodi.php';
+            });
+        </script>";
     } else {
-        die("Error database: " . mysqli_error($connect));
+        echo "<script>
+            Swal.fire('Gagal!', 'Gagal memperbarui data prodi.', 'error')
+            .then(() => window.history.back());
+        </script>";
     }
-
 } else {
-    // ==========================================
-    // LOGIKA CREATE (Data baru)
-    // ==========================================
-    
-    // Query INSERT ke tabel prodi
-    $query = "INSERT INTO prodi (nama_prodi) VALUES ('$nama_prodi')";
 
-    if (mysqli_query($connect, $query)) {
-        echo "
-        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-        <body style='font-family: sans-serif;'>
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: 'Data Program Studi berhasil ditambahkan.',
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(function() {
-                    window.location.href = '" . BASE_URL . "layout/read/data_prodi.php';
-                });
-            </script>
-        </body>";
+    /* ================= CREATE ================= */
+    $data = [
+        'id_jurusan' => $idJurusan, // 🔥 otomatis dari user login
+        'kode_prodi' => $_POST['kode_prodi'],
+        'nama_prodi' => $_POST['nama_prodi'],
+        'jenjang'    => $_POST['jenjang'],
+    ];
+
+    $create = Prodi::create($data);
+
+    if ($create['status']) {
+        echo "<script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Program studi berhasil ditambahkan.',
+                showConfirmButton: true
+            }).then(() => {
+                window.location.href = '" . BASE_URL . "layout/read/data_prodi.php';
+            });
+        </script>";
     } else {
-        die("Error database: " . mysqli_error($connect));
+        echo "<script>
+            Swal.fire('Peringatan!', '{$create['msg']}', 'warning')
+            .then(() => window.history.back());
+        </script>";
     }
 }
-?>
+
+echo "</body>";

@@ -25,7 +25,7 @@ include '../../service/guest.php';
             <div class="card mb-0 shadow-lg">
               <div class="card-body">
                 <a href="<?= BASE_URL; ?>" class="text-nowrap logo-img text-center d-block py-3 w-100">
-                  <img src="<?= BASE_URL; ?>src/images/logos/dark-logo.svg" width="180" alt="">
+                  <img src="<?= BASE_URL; ?>src/images/logos/sitema.png" width="180" alt="">
                 </a>
                 <p class="text-center fw-bold">Sistem Informasi Magang (siTEMA)</p>
                 

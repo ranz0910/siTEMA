@@ -1,93 +1,112 @@
 <?php
+session_start();
 include '../../init.php';
 include '../../service/auth.php';
 require_once '../../repository/Mahasiswa.php';
+require_once '../../repository/Prodi.php';
 
-// Pastikan request POST
+// ================= PROTEKSI METHOD =================
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ' . BASE_URL . 'layout/read/data_mahasiswa.php');
     exit;
 }
 
-// Mode UPDATE jika ada id_mahasiswa
+// ================= CEK LOGIN =================
+if (!isset($_SESSION['user_id'])) {
+    header("Location: " . BASE_URL . "index.php");
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+
+// ================= AMBIL ID JURUSAN DARI USER =================
+$q = mysqli_query($koneksi, "SELECT id FROM jurusan WHERE id_user = '$user_id'");
+$dataJurusan = mysqli_fetch_assoc($q);
+
+if (!$dataJurusan) {
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Jurusan tidak ditemukan untuk user ini.'
+        }).then(() => window.location.href='" . BASE_URL . "layout/read/data_mahasiswa.php');
+    </script>";
+    exit;
+}
+
+$idJurusan = $dataJurusan['id'];
+
+// ================= SWEETALERT =================
+echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+<body style='font-family:sans-serif;'>";
+
+// ================= CEK MODE =================
 $isUpdate = isset($_POST['id_mahasiswa']) && !empty($_POST['id_mahasiswa']);
 
-try {
+$data = [
+    'username'       => $_POST['username'],
+    'password'       => $_POST['password'] ?? '',
+    'email'          => $_POST['email'],
+    'nim'            => $_POST['nim'],
+    'nama_mahasiswa' => $_POST['nama_mahasiswa'],
+    'jenis_kelamin'  => $_POST['jenis_kelamin'],
+    'alamat'         => $_POST['alamat'],
+    'angkatan'       => $_POST['angkatan'],
+    'no_hp'          => $_POST['no_hp'],
+    'id_prodi'       => $_POST['id_prodi'],
+];
 
-    if ($isUpdate) {
-        /* =======================
-            UPDATE
-        ======================= */
-        $data = [
-            'id_mahasiswa'   => $_POST['id_mahasiswa'],
-            'id_user'        => $_POST['id_user'],
-            'id_prodi'       => $_POST['id_prodi'],
-            'username'       => $_POST['username'],
-            'email'          => $_POST['email'],
-            'nim'            => $_POST['nim'],
-            'nama_mahasiswa' => $_POST['nama_mahasiswa'],
-            'jenis_kelamin'  => $_POST['jenis_kelamin'],
-            'alamat'         => $_POST['alamat'],
-            'angkatan'       => $_POST['angkatan'],
-            'no_hp'          => $_POST['no_hp'],
-        ];
+if ($isUpdate) {
+    $data['id_mahasiswa'] = $_POST['id_mahasiswa'];
+    $data['id_user']      = $_POST['id_user'];
+}
 
-        $result = Mahasiswa::update($data);
-        $msg = 'Data Mahasiswa berhasil diperbarui';
+// Pastikan prodi milik jurusan login
+$prodi = Prodi::getById($data['id_prodi']);
+if (!$prodi || $prodi['id_jurusan'] != $idJurusan) {
+    echo "<script>
+        Swal.fire('Gagal!', 'Prodi tidak valid untuk jurusan Anda.', 'error')
+        .then(() => window.history.back());
+    </script>";
+    exit;
+}
 
-    } else {
-        /* =======================
-            CREATE
-        ======================= */
-        $data = [
-            'username'       => $_POST['username'],
-            'password'       => $_POST['password'],
-            'email'          => $_POST['email'],
-            'id_prodi'       => $_POST['id_prodi'],
-            'nim'            => $_POST['nim'],
-            'nama_mahasiswa' => $_POST['nama_mahasiswa'],
-            'jenis_kelamin'  => $_POST['jenis_kelamin'],
-            'alamat'         => $_POST['alamat'],
-            'angkatan'       => $_POST['angkatan'],
-            'no_hp'          => $_POST['no_hp'],
-        ];
-
-        $result = Mahasiswa::create($data);
-        $msg = 'Mahasiswa berhasil ditambahkan';
-    }
-
-    if (!$result['status']) {
-        throw new Exception($result['msg'] ?? 'Gagal menyimpan data');
-    }
-
-    echo "
-    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-    <body>
-        <script>
+// ================= SIMPAN / UPDATE =================
+if ($isUpdate) {
+    $result = Mahasiswa::update($data);
+    if ($result['status']) {
+        echo "<script>
             Swal.fire({
                 icon: 'success',
-                title: 'Berhasil',
-                text: '$msg'
-            }).then(() => {
-                window.location.href = '" . BASE_URL . "layout/read/data_mahasiswa.php';
-            });
-        </script>
-    </body>
-    ";
-
-} catch (Exception $e) {
-    echo "
-    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-    <body>
-        <script>
+                title: 'Berhasil!',
+                text: 'Data mahasiswa berhasil diperbarui.',
+                showConfirmButton: true
+            }).then(() => window.location.href='" . BASE_URL . "layout/read/data_mahasiswa.php');
+        </script>";
+    } else {
+        echo "<script>
+            Swal.fire('Gagal!', '{$result['msg']}', 'error')
+            .then(() => window.history.back());
+        </script>";
+    }
+} else {
+    $result = Mahasiswa::create($data);
+    if ($result['status']) {
+        echo "<script>
             Swal.fire({
-                icon: 'error',
-                title: 'Gagal',
-                text: '" . addslashes($e->getMessage()) . "'
-            }).then(() => {
-                window.history.back();
-            });
-        </script>
-    </body>
-    ";
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Mahasiswa berhasil ditambahkan.',
+                showConfirmButton: true
+            }).then(() => window.location.href='" . BASE_URL . "layout/read/data_mahasiswa.php');
+        </script>";
+    } else {
+        echo "<script>
+            Swal.fire('Peringatan!', '{$result['msg']}', 'warning')
+            .then(() => window.history.back());
+        </script>";
+    }
 }
+
+echo "</body>";

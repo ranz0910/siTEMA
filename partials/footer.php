@@ -4,6 +4,7 @@
 </div>
 </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="<?php echo BASE_URL; ?>src/libs/jquery/dist/jquery.min.js"></script>
 <script src="<?php echo BASE_URL; ?>src/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="<?php echo BASE_URL; ?>src/js/sidebarmenu.js"></script>

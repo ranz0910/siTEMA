@@ -8,7 +8,7 @@ $role_id = isset($_SESSION['id_roles']) ? $_SESSION['id_roles'] : 0;
   <div>
     <div class="brand-logo d-flex align-items-center justify-content-between">
       <a href="<?php echo BASE_URL; ?>index.php" class="text-nowrap logo-img">
-        <img src="<?php echo BASE_URL; ?>src/images/logos/dark-logo.svg" width="180" alt="Logo" />
+        <img src="<?php echo BASE_URL; ?>src/images/logos/sitema.png" width="135" alt="Logo" />
       </a>
       <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
         <i class="ti ti-x fs-8"></i>
@@ -37,15 +37,20 @@ $role_id = isset($_SESSION['id_roles']) ? $_SESSION['id_roles'] : 0;
 
         <?php if ($role_id == 1) : ?>  
           <li class="sidebar-item">
-            <a class="sidebar-link" href="<?php echo BASE_URL; ?>index.php?page=data_jurusan">
+            <a class="sidebar-link" href="<?php echo BASE_URL; ?>layout/read/data_jurusan.php">
               <span><i class="ti ti-building-skyscraper"></i></span><span class="hide-menu">Jurusan</span>
             </a>
           </li>       
           <li class="sidebar-item">
-            <a class="sidebar-link" href="<?php echo BASE_URL; ?>/layout/read/data_perusahaan.php">
-              <span><i class="ti ti-building-community"></i></span><span class="hide-menu">Perusahaan</span>
+            <a class="sidebar-link" href="<?php echo BASE_URL; ?>layout/read/data_perusahaan.php">
+              <span><i class="ti ti-building"></i></span><span class="hide-menu">Perusahaan</span>
             </a>
-          </li>          
+          </li>
+           <li class="sidebar-item">
+            <a class="sidebar-link" href="<?php echo BASE_URL; ?>layout/tampilan/pengajuan_magang.php">
+              <span><i class="ti ti-file-description"></i></span><span class="hide-menu">Pengajuan Magang</span>
+            </a>
+          </li>         
         <?php endif; ?>
 
         <?php if ($role_id == 2) : ?>
@@ -60,7 +65,7 @@ $role_id = isset($_SESSION['id_roles']) ? $_SESSION['id_roles'] : 0;
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="<?php echo BASE_URL; ?>/layout/create/pengajuan_magang.php">
+            <a class="sidebar-link" href="<?php echo BASE_URL; ?>layout/tampilan/pengajuan_magang.php">
               <span><i class="ti ti-file-description"></i></span><span class="hide-menu">Pengajuan Magang</span>
             </a>
           </li>
@@ -68,18 +73,24 @@ $role_id = isset($_SESSION['id_roles']) ? $_SESSION['id_roles'] : 0;
 
         <?php if ($role_id == 3) : ?>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="<?php echo BASE_URL; ?>/layout/read/lowongan_magang.php">
-              <span><i class="ti ti-briefcase"></i></span><span class="hide-menu">Lowongan Magang</span>
+            <a class="sidebar-link" href="<?php echo BASE_URL; ?>layout/read/data_lowongan_magang.php">
+              <span><i class="ti ti-briefcase"></i></span><span class="hide-menu">Data Lowongan Magang</span>
             </a>
           </li>
         <?php endif; ?>
 
         <?php if ($role_id == 4) : ?>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="<?php echo BASE_URL; ?>/layout/create/pengajuan_magang.php">
-              <span><i class="ti ti-file-description"></i></span><span class="hide-menu">Pengajuan Magang</span>
+            <a class="sidebar-link" href="<?php echo BASE_URL; ?>layout/tampilan/lowongan_magang.php">
+              <span><i class="ti ti-briefcase"></i></span><span class="hide-menu">Lowongan Magang</span>
             </a>
           </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="<?php echo BASE_URL; ?>layout/tampilan/pengajuan_magang.php">
+              <span><i class="ti ti-file-description"></i></span><span class="hide-menu">Pengajuan Magang</span>
+            </a>
+          </li>   
         <?php endif; ?>
 
       </ul>

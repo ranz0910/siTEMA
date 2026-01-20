@@ -3,94 +3,85 @@ include '../../init.php';
 include '../../service/auth.php';
 require_once '../../repository/Perusahaan.php';
 
-// Pastikan request POST
+// Proteksi method
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ' . BASE_URL . '/layout/read/data_perusahaan.php');
-    exit;
+  header('Location: ' . BASE_URL . 'layout/read/data_perusahaan.php');
+  exit;
 }
 
-// Mode UPDATE jika ada id_perusahaan
+// SweetAlert
+echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+<body style='font-family:sans-serif;'>";
+
+// ================= CEK MODE =================
 $isUpdate = isset($_POST['id_perusahaan']) && !empty($_POST['id_perusahaan']);
 
-try {
-    // Gunakan operator ?? '' untuk mencegah Warning Undefined Index
-    if ($isUpdate) {
-        /* =======================
-            PROSES UPDATE
-        ======================= */
-        $data = [
-            'id_perusahaan'     => $_POST['id_perusahaan'],
-            'id_user'           => $_POST['id_user'],
-            'username'          => $_POST['username'] ?? '',
-            'email_perusahaan'  => $_POST['email_perusahaan'] ?? '',
-            'nama_perusahaan'   => $_POST['nama_perusahaan'] ?? '',
-            'alamat_perusahaan' => $_POST['alamat_perusahaan'] ?? '',
-            'telp_perusahaan'   => $_POST['telp_perusahaan'] ?? '',
-        ];
+if ($isUpdate) {
 
-        $result = Perusahaan::update($data);
-        $msg = 'Data Perusahaan berhasil diperbarui';
+  /* ================= UPDATE ================= */
+  $data = [
+    'id_perusahaan'     => $_POST['id_perusahaan'],
+    'id_user'           => $_POST['id_user'],
+    'username'          => $_POST['username'],
+    'email'             => $_POST['email_perusahaan'],
+    'npwp'              => $_POST['npwp'],
+    'nama_perusahaan'   => $_POST['nama_perusahaan'],
+    'alamat_perusahaan' => $_POST['alamat_perusahaan'],
+    'telp_perusahaan'   => $_POST['telp_perusahaan'],
+  ];
 
-    } else {
-        /* =======================
-            PROSES CREATE
-        ======================= */
-        $data = [
-            'username'          => $_POST['username'] ?? '',
-            'password'          => $_POST['password'] ?? '',
-            'email_perusahaan'  => $_POST['email_perusahaan'] ?? '',
-            'nama_perusahaan'   => $_POST['nama_perusahaan'] ?? '',
-            'alamat_perusahaan' => $_POST['alamat_perusahaan'] ?? '',
-            'telp_perusahaan'   => $_POST['telp_perusahaan'] ?? '',
-        ];
+  $update = Perusahaan::update($data);
 
-        $result = Perusahaan::create($data);
-        $msg = 'Perusahaan baru berhasil ditambahkan';
-    }
-
-    // Cek status keberhasilan dari Repository
-    if (!$result['status']) {
-        throw new Exception($result['msg'] ?? 'Gagal menyimpan data');
-    }
-
-    // Feedback Sukses dengan SweetAlert2
-    echo "
-    <html>
-    <head>
-        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-    </head>
-    <body style='font-family: sans-serif;'>
-        <script>
+  if ($update) {
+    echo "<script>
             Swal.fire({
                 icon: 'success',
-                title: 'Berhasil',
-                text: '$msg',
-                confirmButtonColor: '#5D87FF'
+                title: 'Berhasil!',
+                text: 'Data perusahaan berhasil diperbarui.',
+                showConfirmButton: true
             }).then(() => {
-                window.location.href = '" . BASE_URL . "/layout/read/data_perusahaan.php';
+                window.location.href = '" . BASE_URL . "layout/read/data_perusahaan.php';
             });
-        </script>
-    </body>
-    </html>";
+        </script>";
+  } else {
+    echo "<script>
+            Swal.fire('Gagal!', 'Gagal memperbarui data perusahaan.', 'error')
+            .then(() => window.history.back());
+        </script>";
+  }
+} else {
 
-} catch (Exception $e) {
-    // Feedback Gagal dengan SweetAlert2
-    echo "
-    <html>
-    <head>
-        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-    </head>
-    <body style='font-family: sans-serif;'>
-        <script>
+  /* ================= CREATE ================= */
+  $data = [
+    'username'          => $_POST['username'],
+    'password'          => $_POST['password'],
+    'email'             => $_POST['email_perusahaan'],
+    'npwp'              => $_POST['npwp'],
+    'nama_perusahaan'   => $_POST['nama_perusahaan'],
+    'alamat_perusahaan' => $_POST['alamat_perusahaan'],
+    'telp_perusahaan'   => $_POST['telp_perusahaan'],
+  ];
+
+  $create = Perusahaan::create($data);
+
+  if ($create['status']) {
+    echo "<script>
             Swal.fire({
-                icon: 'error',
-                title: 'Terjadi Kesalahan',
-                text: '" . addslashes($e->getMessage()) . "',
-                confirmButtonColor: '#d33'
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Perusahaan baru berhasil ditambahkan.',
+                timer: 2000,
+                showConfirmButton: true
             }).then(() => {
-                window.history.back();
+                window.location.href = '" . BASE_URL . "layout/read/data_perusahaan.php';
             });
-        </script>
-    </body>
-    </html>";
+        </script>";
+  } else {
+    echo "<script>
+            Swal.fire('Peringatan!', '{$create['msg']}', 'warning')
+            .then(() => window.history.back());
+        </script>";
+  }
 }
+
+echo "</body>";

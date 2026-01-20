@@ -1,169 +1,138 @@
 <?php
-require_once __DIR__ . '/../service/connection.php';
-
-class Mahasiswa {
-    public static function getAll()
+class Mahasiswa
+{
+    // ================= GET ALL MAHASISWA SESUAI JURUSAN =================
+    public static function getAllByJurusan($id_jurusan)
     {
-        global $connect;
+        global $koneksi;
+        $id_jurusan = (int)$id_jurusan;
 
         $sql = "
-            SELECT
-                m.id AS id_mahasiswa,
-                m.nim,
-                m.nama_mahasiswa,
-                m.alamat,
-                m.no_hp,
-                m.angkatan,
-                u.username,
-                u.email,
-                j.nama_jurusan,    -- Pastikan kolom ini ada di tabel jurusan
-                p.nama_prodi AS prodi -- Kita beri alias 'prodi' agar sesuai layout
-            FROM mahasiswa m
-            JOIN users u ON m.id_user = u.id
-            LEFT JOIN prodi p ON m.id_prodi = p.id
-            LEFT JOIN jurusan j ON p.id_jurusan = j.id
-            ORDER BY m.nama_mahasiswa ASC
+        SELECT m.*, u.username, u.email, p.nama_prodi
+        FROM mahasiswa m
+        JOIN users u ON m.id_user = u.id
+        JOIN prodi p ON m.id_prodi = p.id
+        WHERE p.id_jurusan = '$id_jurusan'
+        ORDER BY m.nama_mahasiswa ASC
         ";
 
-        return mysqli_query($connect, $sql);
+        return mysqli_query($koneksi, $sql);
     }
 
-    /* =======================
-        GET BY ID
-    ======================= */
-    public static function getById($id)
+    // ================= CREATE MAHASISWA =================
+    public static function create($data)
     {
-        global $connect;
-        $id = mysqli_real_escape_string($connect, $id);
-        $sql = "SELECT m.*, m.id as id_mahasiswa, u.username, u.email 
-                FROM mahasiswa m 
-                JOIN users u ON m.id_user = u.id 
-                WHERE m.id = '$id'";
-        $result = mysqli_query($connect, $sql);
-        return mysqli_fetch_assoc($result);
-    }
+        global $koneksi;
 
-    /* =======================
-        DELETE (Mahasiswa + User)
-    ======================= */
-    public static function delete($id)
-    {
-        global $connect;
-        $id = mysqli_real_escape_string($connect, $id);
-        
-        // Ambil id_user dulu sebelum data mahasiswa dihapus
-        $data = self::getById($id);
-        $id_user = $data['id_user'];
+        $username       = mysqli_real_escape_string($koneksi, $data['username']);
+        $password       = md5($data['password']);
+        $email          = mysqli_real_escape_string($koneksi, $data['email']);
+        $nim            = mysqli_real_escape_string($koneksi, $data['nim']);
+        $nama_mahasiswa = mysqli_real_escape_string($koneksi, $data['nama_mahasiswa']);
+        $jenis_kelamin  = mysqli_real_escape_string($koneksi, $data['jenis_kelamin']);
+        $alamat         = mysqli_real_escape_string($koneksi, $data['alamat']);
+        $angkatan       = mysqli_real_escape_string($koneksi, $data['angkatan']);
+        $no_hp          = mysqli_real_escape_string($koneksi, $data['no_hp']);
+        $id_prodi       = (int)$data['id_prodi'];
+        $id_roles       = 4; // Role Mahasiswa
 
-        mysqli_begin_transaction($connect);
+        // Cek duplikat username/email
+        $cek = $koneksi->query("SELECT id FROM users WHERE username='$username' OR email='$email'");
+        if ($cek->num_rows > 0) {
+            return ['status' => false, 'msg' => 'Username atau Email sudah terdaftar'];
+        }
+
+        // Mulai transaksi
+        mysqli_begin_transaction($koneksi);
         try {
-            // Hapus Mahasiswa
-            mysqli_query($connect, "DELETE FROM mahasiswa WHERE id = '$id'");
-            // Hapus User Login
-            mysqli_query($connect, "DELETE FROM users WHERE id = '$id_user'");
+            // 1. Insert ke tabel users
+            $koneksi->query("
+                INSERT INTO users (id_roles, username, password, email)
+                VALUES ('$id_roles', '$username', '$password', '$email')
+            ");
+            $id_user = $koneksi->insert_id;
 
-            mysqli_commit($connect);
+            // 2. Insert ke tabel mahasiswa
+            $koneksi->query("
+                INSERT INTO mahasiswa (id_user, id_prodi, nim, nama_mahasiswa, jenis_kelamin, alamat, angkatan, no_hp)
+                VALUES ('$id_user', '$id_prodi', '$nim', '$nama_mahasiswa', '$jenis_kelamin', '$alamat', '$angkatan', '$no_hp')
+            ");
+
+            mysqli_commit($koneksi);
             return ['status' => true];
         } catch (Exception $e) {
-            mysqli_rollback($connect);
-            return ['status' => false, 'msg' => $e->getMessage()];
+            mysqli_rollback($koneksi);
+            return ['status' => false, 'msg' => 'Gagal menyimpan data mahasiswa'];
         }
     }
 
-    public static function create($data) {
-        global $connect;
-        $username = mysqli_real_escape_string($connect, $data['username']);
-        
-        // Cek apakah username sudah ada
-        $check = mysqli_query($connect, "SELECT id FROM users WHERE username = '$username'");
-        if (mysqli_num_rows($check) > 0) {
-            return ['status' => false, 'msg' => 'Username sudah digunakan, cari yang lain!'];
-        }
-        $username = mysqli_real_escape_string($connect, $data['username']);
-        $email    = mysqli_real_escape_string($connect, $data['email']);
-        $password = md5($data['password']);
-        $id_roles = 4;
-
-        mysqli_begin_transaction($connect);
-        try {
-            // PERBAIKAN: Sertakan email agar tidak terjadi duplicate string kosong
-            mysqli_query($connect, "INSERT INTO users (username, email, password, id_roles) 
-                                    VALUES ('$username', '$email', '$password', '$id_roles')");
-            
-            $id_user = mysqli_insert_id($connect);
-            $id_prodi = mysqli_real_escape_string($connect, $data['id_prodi']);
-            $nim = mysqli_real_escape_string($connect, $data['nim']);
-            $nama = mysqli_real_escape_string($connect, $data['nama_mahasiswa']);
-            $jk = mysqli_real_escape_string($connect, $data['jenis_kelamin']);
-            $alamat = mysqli_real_escape_string($connect, $data['alamat']);
-            $no_hp = mysqli_real_escape_string($connect, $data['no_hp']);
-            $angkatan = mysqli_real_escape_string($connect, $data['angkatan']);
-
-            mysqli_query($connect, "INSERT INTO mahasiswa (id_user, id_prodi, nim, nama_mahasiswa, jenis_kelamin, alamat, no_hp, angkatan)
-                                    VALUES ('$id_user', '$id_prodi', '$nim', '$nama', '$jk', '$alamat', '$no_hp', '$angkatan')");
-
-            mysqli_commit($connect);
-            return ['status' => true];
-        } catch (Exception $e) {
-            mysqli_rollback($connect);
-            return ['status' => false, 'msg' => $e->getMessage()];
-        }
-    }
-
+    // ================= UPDATE MAHASISWA =================
     public static function update($data)
     {
-        global $connect;
+        global $koneksi;
 
-        // Gunakan null coalescing (??) untuk mencegah "Undefined array key"
-        $id_mhs   = mysqli_real_escape_string($connect, $data['id_mahasiswa']);
-        $id_user  = mysqli_real_escape_string($connect, $data['id_user']);
-        $username = mysqli_real_escape_string($connect, $data['username']);
-        $email    = mysqli_real_escape_string($connect, $data['email']);
-        $nim      = mysqli_real_escape_string($connect, $data['nim']);
-        $nama     = mysqli_real_escape_string($connect, $data['nama_mahasiswa']);
-        $jk       = mysqli_real_escape_string($connect, $data['jenis_kelamin']);
-        $alamat   = mysqli_real_escape_string($connect, $data['alamat']);
-        $no_hp    = mysqli_real_escape_string($connect, $data['no_hp']);
-        $id_prodi = mysqli_real_escape_string($connect, $data['id_prodi']);// Default ke 0 jika kosong
-        $angkatan = mysqli_real_escape_string($connect, $data['angkatan']);
+        $id_mahasiswa   = (int)$data['id_mahasiswa'];
+        $id_user        = (int)$data['id_user'];
+        $username       = mysqli_real_escape_string($koneksi, $data['username']);
+        $email          = mysqli_real_escape_string($koneksi, $data['email']);
+        $nim            = mysqli_real_escape_string($koneksi, $data['nim']);
+        $nama_mahasiswa = mysqli_real_escape_string($koneksi, $data['nama_mahasiswa']);
+        $jenis_kelamin  = mysqli_real_escape_string($koneksi, $data['jenis_kelamin']);
+        $alamat         = mysqli_real_escape_string($koneksi, $data['alamat']);
+        $angkatan       = mysqli_real_escape_string($koneksi, $data['angkatan']);
+        $no_hp          = mysqli_real_escape_string($koneksi, $data['no_hp']);
+        $id_prodi       = (int)$data['id_prodi'];
+        $password       = trim($data['password'] ?? ''); // opsional
 
-        mysqli_begin_transaction($connect);
-
+        mysqli_begin_transaction($koneksi);
         try {
-            // Update Tabel Users
-            $sqlUser = "UPDATE users SET username = '$username', email = '$email' WHERE id = '$id_user'";
-            if (!mysqli_query($connect, $sqlUser)) {
-                throw new Exception("Gagal update user: " . mysqli_error($connect));
+            // Update user
+            if (!empty($password)) {
+                $password_hashed = md5($password);
+                $koneksi->query("
+                    UPDATE users SET username='$username', email='$email', password='$password_hashed' WHERE id='$id_user'
+                ");
+            } else {
+                $koneksi->query("
+                    UPDATE users SET username='$username', email='$email' WHERE id='$id_user'
+                ");
             }
 
-            // Update Password jika diisi
-            if (!empty($data['password'])) {
-                $pass = md5($data['password']);
-                mysqli_query($connect, "UPDATE users SET password = '$pass' WHERE id = '$id_user'");
-            }
+            // Update mahasiswa
+            $koneksi->query("
+                UPDATE mahasiswa
+                SET id_prodi='$id_prodi', nim='$nim', nama_mahasiswa='$nama_mahasiswa', jenis_kelamin='$jenis_kelamin',
+                    alamat='$alamat', angkatan='$angkatan', no_hp='$no_hp'
+                WHERE id='$id_mahasiswa'
+            ");
 
-            // Update Tabel Mahasiswa (Pastikan WHERE id sesuai nama kolom di DB)
-            // Jika nama kolom primernya 'id', maka WHERE id = '$id_mhs'
-            $sqlMhs = "UPDATE mahasiswa SET 
-                        nim = '$nim', 
-                        nama_mahasiswa = '$nama', 
-                        jenis_kelamin = '$jk', 
-                        alamat = '$alamat', 
-                        no_hp = '$no_hp', 
-                        id_prodi = '$id_prodi',
-                        angkatan = '$angkatan' 
-                    WHERE id = '$id_mhs'";
-            
-            if (!mysqli_query($connect, $sqlMhs)) {
-                throw new Exception("Gagal update mahasiswa: " . mysqli_error($connect));
-            }
-
-            mysqli_commit($connect);
+            mysqli_commit($koneksi);
             return ['status' => true];
-
         } catch (Exception $e) {
-            mysqli_rollback($connect);
-            return ['status' => false, 'msg' => $e->getMessage()];
+            mysqli_rollback($koneksi);
+            return ['status' => false, 'msg' => 'Gagal mengupdate data mahasiswa'];
         }
+    }
+
+    // ================= DELETE MAHASISWA =================
+    public static function delete($id_mahasiswa)
+    {
+        global $koneksi;
+
+        // Ambil id_user dulu
+        $get = $koneksi->query("SELECT id_user FROM mahasiswa WHERE id='$id_mahasiswa'");
+        if ($get->num_rows == 0) {
+            return ['status' => false, 'msg' => 'Data mahasiswa tidak ditemukan'];
+        }
+
+        $row = $get->fetch_assoc();
+        $id_user = $row['id_user'];
+
+        // Hapus mahasiswa
+        $koneksi->query("DELETE FROM mahasiswa WHERE id='$id_mahasiswa'");
+        // Hapus user
+        $koneksi->query("DELETE FROM users WHERE id='$id_user'");
+
+        return ['status' => true];
     }
 }

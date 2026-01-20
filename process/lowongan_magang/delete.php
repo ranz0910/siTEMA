@@ -2,30 +2,34 @@
 session_start();
 include '../../init.php';
 include '../../service/auth.php';
-require_once '../../repository/Perusahaan.php';
+require_once '../../repository/lowongan_magang.php';
 
 echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
 <body style='font-family:sans-serif;'>";
 
-// ================= VALIDASI ROLE =================
-// HANYA SUPER ADMIN
-if (!isset($_SESSION['id_roles']) || $_SESSION['id_roles'] != 1) {
-  aksesDitolak();
-  exit;
-}
-
 // ================= VALIDASI ID =================
-$id_perusahaan = $_GET['id'] ?? null;
+$id_lowongan = $_GET['id'] ?? null;
 
-if (!$id_perusahaan) {
+if (!$id_lowongan) {
   echo "<script>
-        window.location.href = '" . BASE_URL . "layout/read/data_perusahaan.php';
+        window.location.href = '" . BASE_URL . "layout/read/data_lowongan_magang.php';
     </script>";
   exit;
 }
 
-// ================= DELETE =================
-$result = Perusahaan::delete($id_perusahaan);
+// Ambil user_id dan role
+$user_id = $_SESSION['user_id'] ?? null;
+$role_id = $_SESSION['id_roles'] ?? null;
+
+// ================= ROLE CHECK =================
+// Misal: role 1 = Super Admin, role 2 = Perusahaan/HR
+if (!$user_id) {
+  aksesDitolak();
+  exit;
+}
+
+// ================= HAPUS LOWONGAN =================
+$result = Lowongan::delete($id_lowongan, $user_id);
 
 // ================= RESPONSE =================
 if ($result['status']) {
@@ -33,10 +37,10 @@ if ($result['status']) {
         Swal.fire({
             icon: 'success',
             title: 'Berhasil!',
-            text: 'Data perusahaan berhasil dihapus.',
+            text: 'Lowongan berhasil dihapus.',
             showConfirmButton: true
         }).then(() => {
-            window.location.href = '" . BASE_URL . "layout/read/data_perusahaan.php';
+            window.location.href = '" . BASE_URL . "layout/read/data_lowongan_magang.php';
         });
     </script>";
 } else {
@@ -58,9 +62,9 @@ function aksesDitolak()
         Swal.fire({
             icon: 'warning',
             title: 'Akses Ditolak!',
-            text: 'Hanya Admin Utama yang dapat menghapus data perusahaan.'
+            text: 'Anda tidak memiliki otoritas untuk menghapus lowongan ini.'
         }).then(() => {
-            window.location.href = '" . BASE_URL . "layout/read/data_perusahaan.php';
+            window.location.href = '" . BASE_URL . "layout/read/data_lowongan_magang.php';
         });
     </script>";
 }

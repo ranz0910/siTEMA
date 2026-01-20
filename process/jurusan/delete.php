@@ -1,67 +1,87 @@
 <?php
 session_start();
-include '../../init.php'; 
+include '../../init.php';
 include '../../service/auth.php';
 
-// Proteksi agar tidak muncul warning jika session kosong
-$user_id = $_SESSION['user_id'] ?? null; 
-$id_prodi = isset($_GET['id']) ? mysqli_real_escape_string($connect, $_GET['id']) : null;
-
 echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-      <body style='font-family: sans-serif;'>";
+<body style='font-family:sans-serif;'>";
 
-if (!$id_prodi) {
-    echo "<script>window.location.href = '../../index.php?page=data_prodi';</script>";
+// ================= VALIDASI ID =================
+$id_jurusan = $_GET['id'] ?? null;
+
+if (!$id_jurusan) {
+    echo "<script>
+        window.location.href = '../../index.php?page=data_jurusan';
+    </script>";
     exit;
 }
 
-// JIKA LOGIN SEBAGAI SUPER ADMIN (Role 1), Langsung Hapus Tanpa Cek Kepemilikan Jurusan
+// ================= ROLE CHECK =================
+// Role:
+// 1 = Super Admin
+// 2 = Admin Jurusan
+
 if ($_SESSION['id_roles'] == 1) {
-    $query_hapus = "DELETE FROM prodi WHERE id = '$id_prodi'";
+    // ================= SUPER ADMIN =================
+    $result = Jurusan::delete($id_jurusan);
 } else {
-    // JIKA LOGIN SEBAGAI ADMIN JURUSAN, Cek Kepemilikan
-    $query_jurusan = mysqli_query($connect, "SELECT id FROM jurusan WHERE id_user = '$user_id'");
-    $data_jurusan = mysqli_fetch_assoc($query_jurusan);
-    
-    if ($data_jurusan) {
-        $id_jurusan_admin = $data_jurusan['id'];
-        $query_hapus = "DELETE FROM prodi WHERE id = '$id_prodi' AND id_jurusan = '$id_jurusan_admin'";
-    } else {
-        $query_hapus = null; // Menandakan akses tidak sah
+    // ================= ADMIN JURUSAN =================
+    $user_id = $_SESSION['user_id'] ?? null;
+
+    if (!$user_id) {
+        aksesDitolak();
+        exit;
     }
+
+    // Ambil jurusan milik admin
+    $jurusan = mysqli_query(
+        $koneksi,
+        "SELECT id FROM jurusan WHERE id_user = '$user_id'"
+    );
+    $data = mysqli_fetch_assoc($jurusan);
+
+    if (!$data || $data['id'] != $id_jurusan) {
+        aksesDitolak();
+        exit;
+    }
+
+    $result = Jurusan::delete($id_jurusan);
 }
 
-if ($query_hapus) {
-    $eksekusi = mysqli_query($connect, $query_hapus);
-    if ($eksekusi && mysqli_affected_rows($connect) > 0) {
-        echo "<script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: 'Data Program Studi telah dihapus.',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(function() {
-                window.location.href = '../../index.php?page=data_prodi';
-            });
-        </script>";
-    } else {
-        echo "<script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: 'Data tidak ditemukan atau masih terikat data lain.',
-            }).then(function() { window.history.back(); });
-        </script>";
-    }
+// ================= RESPONSE =================
+if ($result['status']) {
+    echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Data jurusan berhasil dihapus.',
+            showConfirmButton: true
+        }).then(() => {
+            window.location.href = '" . BASE_URL . "layout/read/data_jurusan.php';
+        });
+    </script>";
 } else {
+    echo "<script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{$result['msg']}'
+        }).then(() => window.history.back());
+    </script>";
+}
+
+echo "</body>";
+
+// ================= HELPER =================
+function aksesDitolak()
+{
     echo "<script>
         Swal.fire({
             icon: 'warning',
             title: 'Akses Ditolak!',
-            text: 'Anda tidak memiliki otoritas untuk menghapus data ini.',
-        }).then(function() { window.location.href = '../../index.php?page=data_prodi'; });
+            text: 'Anda tidak memiliki otoritas untuk menghapus data ini.'
+        }).then(() => {
+            window.location.href = '" . BASE_URL . "layout/read/data_jurusan.php';
+        });
     </script>";
 }
-echo "</body>";
-?>
